@@ -6,10 +6,18 @@ trait RecordsActivity {
 
     protected static function bootRecordsActivity() {
 
-        static::created(function ($thread) {
-            $thread->recordActivity('created');
-        });
+        if (auth()->guest()) return;
 
+        foreach (static::getActivitiesToRecord() as $event) {
+            static::$event(function ($model) use ($event) {
+                $model->recordActivity($event);
+            });
+        }
+
+    }
+
+    protected static function getActivitiesToRecord() {
+        return ['created'];
     }
 
     public function recordActivity($event) {
