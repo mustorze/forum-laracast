@@ -11563,7 +11563,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         update: function update() {
-            axios.patch('/replies/' + this.attributes.id, {
+            axios.patch('/forum-laracast/public/replies/' + this.attributes.id, {
                 body: this.body
             });
 
@@ -11572,7 +11572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         destroy: function destroy() {
 
-            axios.delete('/replies/' + this.attributes.id);
+            axios.delete('/forum-laracast/public/replies/' + this.attributes.id);
             $(this.$el).fadeOut(300, function () {
                 flash('Your reply has been deleted.');
             });
