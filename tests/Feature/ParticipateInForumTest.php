@@ -49,4 +49,65 @@ class ParticipateInForumTest extends TestCase
 
     }
 
+    /** @test */
+    public function unauthorized_users_cannot_delete_replies() {
+
+        $this->withExceptionHandling();
+
+        $reply = create('App\Reply');
+
+        $this->delete(route('replies.delete', $reply->id))
+        ->assertRedirect('/login');
+
+        $this->signIn()
+        ->delete(route('replies.delete', $reply->id))
+        ->assertStatus(403);
+
+    }
+
+    /** @test */
+    public function authorized_users_can_delete_replies() {
+
+        $this->signIn();
+
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $this->delete(route('replies.delete', $reply->id))
+        ->assertStatus(302);
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+    }
+
+    /** @test */
+    public function authorized_users_can_update_replies() {
+
+        $this->signIn();
+
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $updatedReply = 'Youre changed fool.';
+
+        $this->patch(route('replies.update', $reply->id), ['body' => $updatedReply]);
+
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedReply]);
+
+    }
+
+    /** @test */
+    public function unauthorized_users_cannot_update_replies() {
+
+        $this->withExceptionHandling();
+
+        $reply = create('App\Reply');
+
+        $this->patch(route('replies.update', $reply->id))
+        ->assertRedirect('/login');
+
+        $this->signIn()
+        ->patch(route('replies.delete', $reply->id))
+        ->assertStatus(403);
+
+    }
+
 }

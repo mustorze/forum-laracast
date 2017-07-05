@@ -25,7 +25,28 @@ class RepliesController extends Controller
             'user_id' =>    auth()->id()
         ]);
 
+        return back()->with('flash', 'Your reply has been left.');
+
+    }
+
+    public function destroy(Reply $reply) {
+
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        if (request()->wantsJson()) {
+            return response(['status' => 'Reply deleted']);
+        }
+
         return back();
+
+    }
+
+    public function update(Reply $reply) {
+
+        $this->authorize('update', $reply);
+        $reply->update(request(['body']));
 
     }
 
