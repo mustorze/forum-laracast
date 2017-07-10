@@ -23,7 +23,7 @@ export default {
         },
 
         endpoint() {
-            return '/forum-laracast/public/replies/' + this.reply.id + '/favorites';
+            return '/forum/public/replies/' + this.reply.id + '/favorites';
         }
     },
 

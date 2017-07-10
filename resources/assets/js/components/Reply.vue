@@ -2,20 +2,20 @@
 import Favorite from './Favorite.vue';
 
 export default {
-    props: ['attributes'],
+    props: ['data'],
 
     components: { Favorite },
 
     data() {
         return {
             editing: false,
-            body: this.attributes.body,
+            body: this.data.body,
         };
     },
 
     methods: {
         update() {
-            axios.patch('/forum-laracast/public/replies/' + this.attributes.id, {
+            axios.patch('/forum/public/replies/' + this.data.id, {
                 body: this.body
             });
 
@@ -26,7 +26,7 @@ export default {
 
         destroy() {
 
-            axios.delete('/forum-laracast/public/replies/' + this.attributes.id);
+            axios.delete('/forum/public/replies/' + this.data.id);
             $(this.$el).fadeOut(300, () => {
                 flash('Your reply has been deleted.');
             });

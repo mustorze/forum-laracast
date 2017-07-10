@@ -28,16 +28,18 @@
 
                     </div>
 
+                    <replies :data="{{ $threads->replies }}"></replies>
+
                     <div class="panel-body">
                         {{ $thread->body }}
                     </div>
-                </div>
+                {{-- </div>
 
                 @foreach ($replies as $reply)
                     @include('threads.reply')
                 @endforeach
 
-                {{ $replies->links() }}
+                {{ $replies->links() }} --}}
 
                 @if (auth()->check())
 

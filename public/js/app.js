@@ -808,7 +808,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp71\\htdocs\\forum-laracast\\resources\\assets\\js\\components\\Favorite.vue"
+Component.options.__file = "C:\\xampp71\\htdocs\\forum\\resources\\assets\\js\\components\\Favorite.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Favorite.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -11461,7 +11461,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return ['btn', this.active ? 'btn-primary' : 'btn-default'];
         },
         endpoint: function endpoint() {
-            return '/forum-laracast/public/replies/' + this.reply.id + '/favorites';
+            return '/forum/public/replies/' + this.reply.id + '/favorites';
         }
     },
 
@@ -11563,7 +11563,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         update: function update() {
-            axios.patch('/forum-laracast/public/replies/' + this.attributes.id, {
+            axios.patch('/forum/public/replies/' + this.attributes.id, {
                 body: this.body
             });
 
@@ -11572,7 +11572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         destroy: function destroy() {
 
-            axios.delete('/forum-laracast/public/replies/' + this.attributes.id);
+            axios.delete('/forum/public/replies/' + this.attributes.id);
             $(this.$el).fadeOut(300, function () {
                 flash('Your reply has been deleted.');
             });
@@ -41637,7 +41637,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp71\\htdocs\\forum-laracast\\resources\\assets\\js\\components\\Flash.vue"
+Component.options.__file = "C:\\xampp71\\htdocs\\forum\\resources\\assets\\js\\components\\Flash.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Flash.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -41671,7 +41671,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp71\\htdocs\\forum-laracast\\resources\\assets\\js\\components\\Reply.vue"
+Component.options.__file = "C:\\xampp71\\htdocs\\forum\\resources\\assets\\js\\components\\Reply.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
