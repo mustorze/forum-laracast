@@ -6,7 +6,7 @@
             <div class="level">
                 <h5 class="flex">
                     <a :href="'http://localhost/forum/public/profiles/'+data.owner.name" v-text="data.owner.name">
-                    </a> said {{ data.created_at }}
+                    </a> said <span v-text="ago"></span>
                 </h5>
 
                 <div v-if="signedIn">
@@ -42,6 +42,7 @@
 
 <script>
 import Favorite from './Favorite.vue';
+import moment from 'moment';
 
 export default {
     props: ['data'],
@@ -52,7 +53,7 @@ export default {
         return {
             editing: false,
             id: this.data.id,
-            body: this.data.body,
+            body: this.data.body
         };
     },
 
@@ -64,6 +65,10 @@ export default {
 
         canUpdate() {
             return this.authorize(user => this.data.user_id == window.App.user.id);
+        },
+
+        ago() {
+            return moment(this.data.created_at).fromNow() + '...';
         }
 
     },
