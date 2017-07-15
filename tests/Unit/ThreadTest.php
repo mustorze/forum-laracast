@@ -70,4 +70,35 @@ class ThreadTest extends TestCase
 
     }
 
+    /** @test */
+    public function a_thread_can_be_subscribed_to() {
+
+        $thread = create('App\Thread');
+
+        $this->signIn();
+
+        $thread->subscribe();
+
+        $this->assertEquals(
+            1,
+            $thread->subscriptions()->where('user_id', auth()->id())->count()
+        );
+
+    }
+
+    /** @test */
+    public function a_thread_can_be_unsubscribed_from() {
+
+        $thread = create('App\Thread');
+
+        $this->signIn();
+
+        $thread->subscribe();
+
+        $thread->unsubscribe();
+
+        $this->assertCount(0, $thread->subscriptions);
+
+    }
+
 }
