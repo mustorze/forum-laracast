@@ -11,7 +11,7 @@
 
         </div>
 
-        <p class="text-center" v-else>Please <a href="http://localhost/forum/public/login">sign in</a> to participate in this discussion.</p>
+        <p class="text-center" v-else>Please <a href="/login">sign in</a> to participate in this discussion.</p>
 
 
     </div>

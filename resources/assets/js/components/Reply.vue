@@ -5,7 +5,7 @@
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'http://localhost/forum/public/profiles/'+data.owner.name" v-text="data.owner.name">
+                    <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name">
                     </a> said <span v-text="ago"></span>
                 </h5>
 
@@ -75,7 +75,7 @@ export default {
 
     methods: {
         update() {
-            axios.patch('/forum/public/replies/' + this.data.id, {
+            axios.patch('/replies/' + this.data.id, {
                 body: this.body
             });
 
@@ -86,7 +86,7 @@ export default {
 
         destroy() {
 
-            axios.delete('/forum/public/replies/' + this.data.id);
+            axios.delete('/replies/' + this.data.id);
 
             this.$emit('deleted', this.data.id);
 

@@ -5,11 +5,6 @@
                 <span aria-hidden="true">&laquo; Previous</span>
             </a>
         </li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
         <li v-if="nextUrl">
             <a href="#" aria-label="Next" rel="next" @click.prevent="page++">
                 <span aria-hidden="true">Next &raquo;</span>

@@ -23,7 +23,7 @@ export default {
         },
 
         endpoint() {
-            return '/forum/public/replies/' + this.reply.id + '/favorites';
+            return '/replies/' + this.reply.id + '/favorites';
         }
     },
 
