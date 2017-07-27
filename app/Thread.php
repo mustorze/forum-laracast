@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ThreadHasNewReply;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +17,8 @@ class Thread extends Model
 
     protected $appends = ['isSubscribedTo'];
 
-    protected static function boot() {
+    protected static function boot()
+    {
 
         parent::boot();
 
@@ -26,52 +28,87 @@ class Thread extends Model
 
     }
 
-    public function path() {
+    public function path()
+    {
 
         return url('/') . '/threads/' . $this->channel->slug . '/' . $this->id;
 
     }
 
-    public function replies() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
 
         return $this->hasMany(Reply::class);
 
     }
 
-    public function getReplyCountAttribute() {
+    /**
+     * @return mixed
+     */
+    public function getReplyCountAttribute()
+    {
 
         return $this->replies()->count();
 
     }
 
-    public function creator() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function creator()
+    {
 
         return $this->belongsTo(User::class, 'user_id');
 
     }
 
-    public function channel() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function channel()
+    {
         return $this->belongsTo(Channel::class);
     }
 
-    public function addReply($reply) {
-
+    /**
+     * @param $reply
+     * @return mixed
+     */
+    public function addReply($reply)
+    {
         $reply = $this->replies()->create($reply);
 
-        $this->subscriptions
-        ->filter(function ($sub) use ($reply) {
-            return $sub->user_id != $reply->user_id;
-        })
-        ->each->notify($reply);
+        event(new ThreadHasNewReply($this, $reply));
 
         return $reply;
     }
 
-    public function scopeFilter($query, $filters) {
+    /**
+     * @param $reply
+     */
+    public function notifySubscribers($reply)
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
+    }
+
+    /**
+     * @param $query
+     * @param $filters
+     * @return mixed
+     */
+    public function scopeFilter($query, $filters)
+    {
         return $filters->apply($query);
     }
 
-    public function subscribe($userId = null) {
+    public function subscribe($userId = null)
+    {
 
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
@@ -81,26 +118,29 @@ class Thread extends Model
 
     }
 
-    public function unsubscribe($userId = null) {
+    public function unsubscribe($userId = null)
+    {
 
         $this->subscriptions()
-        ->where('user_id', $userId ?: auth()->id())
-        ->delete();
+            ->where('user_id', $userId ?: auth()->id())
+            ->delete();
 
         return $this;
 
     }
 
-    public function subscriptions() {
+    public function subscriptions()
+    {
 
         return $this->hasMany(ThreadSubscription::class);
 
     }
 
-    public function getIsSubscribedToAttribute() {
+    public function getIsSubscribedToAttribute()
+    {
         return $this->subscriptions()
-        ->where('user_id', auth()->id())
-        ->exists();
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 
 }
