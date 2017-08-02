@@ -28,6 +28,9 @@ class Thread extends Model
 
     }
 
+    /**
+     * @return string
+     */
     public function path()
     {
 
@@ -107,6 +110,10 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
+    /**
+     * @param null $userId
+     * @return $this
+     */
     public function subscribe($userId = null)
     {
 
@@ -118,6 +125,10 @@ class Thread extends Model
 
     }
 
+    /**
+     * @param null $userId
+     * @return $this
+     */
     public function unsubscribe($userId = null)
     {
 
@@ -129,6 +140,9 @@ class Thread extends Model
 
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function subscriptions()
     {
 
@@ -136,11 +150,27 @@ class Thread extends Model
 
     }
 
+    /**
+     * @return bool
+     */
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()
             ->where('user_id', auth()->id())
             ->exists();
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasUpdatesFor($user = null)
+    {
+        $user = $user ?: auth()->user();
+
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
     }
 
 }

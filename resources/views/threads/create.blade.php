@@ -26,12 +26,14 @@
 
                             <div class="form-group">
                                 <label for="title">Title</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       value="{{ old('title') }}" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="body">Body</label>
-                                <textarea name="body" id="body" class="form-control" rows="8" required>{{ old('body') }}</textarea>
+                                <textarea name="body" id="body" class="form-control" rows="8"
+                                          required>{{ old('body') }}</textarea>
                             </div>
 
                             <div class="form-group">
@@ -49,7 +51,6 @@
                             @endif
 
                         </form>
-
 
 
                     </div>

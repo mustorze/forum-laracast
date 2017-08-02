@@ -11,7 +11,19 @@
                             <div class="level">
 
                                 <h4 class="flex">
-                                    <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
+                                    <a href="{{ $thread->path() }}">
+
+                                        @if(auth()->check() AND $thread->hasUpdatesFor(auth()->user()))
+
+                                            <strong>{{ $thread->title }}</strong>
+
+                                        @else
+
+                                            {{ $thread->title }}
+
+                                        @endif
+
+                                    </a>
                                 </h4>
 
                                 <strong><a href="{{ $thread->path() }}">{{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}</a></strong>

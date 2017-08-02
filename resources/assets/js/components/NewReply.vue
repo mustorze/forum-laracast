@@ -4,7 +4,8 @@
         <div v-if="signedIn">
 
             <div class="form-group">
-                <textarea name="body" id="body" class="form-control" placeholder="Have something to say?" rows="5" v-model="body" required></textarea>
+                <textarea name="body" id="body" class="form-control" placeholder="Have something to say?" rows="5"
+                          v-model="body" required></textarea>
             </div>
 
             <button type="submit" class="btn btn-default" name="button" @click="addReply">Post</button>
@@ -18,31 +19,34 @@
 </template>
 
 <script>
-export default {
+    export default {
 
-    data() {
-        return {
-            body: ''
-        };
-    },
+        data() {
+            return {
+                body: ''
+            };
+        },
 
-    computed: {
-        signedIn() {
-            return window.App.signedIn;
-        }
-    },
+        computed: {
+            signedIn() {
+                return window.App.signedIn;
+            }
+        },
 
-    methods: {
-        addReply() {
-            axios.post(location.pathname + '/replies', {body: this.body})
-            .then(({data}) => {
-                this.body = '';
+        methods: {
+            addReply() {
+                axios.post(location.pathname + '/replies', {body: this.body})
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    })
+                    .then(({data}) => {
+                        this.body = '';
 
-                flash('Your reply has been posted.');
+                        flash('Your reply has been posted.');
 
-                this.$emit('created', data);
-            });
+                        this.$emit('created', data);
+                    });
+            }
         }
     }
-}
 </script>

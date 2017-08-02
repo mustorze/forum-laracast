@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -13,7 +15,8 @@ class ThreadTest extends TestCase
 
     protected $thread;
 
-    public function setUp() {
+    public function setUp()
+    {
 
         parent::setUp();
 
@@ -48,15 +51,32 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function test_a_thread_can_add_a_reply()
+    public function a_thread_can_add_a_reply()
     {
 
         $this->thread->addReply([
-            'body'    =>    'Foobar',
-            'user_id' =>    1
+            'body' => 'Foobar',
+            'user_id' => 1
         ]);
 
         $this->assertCount(1, $this->thread->replies);
+
+    }
+
+    /** @test */
+    public function a_thread_notifies_all_registred_subscriber_when_a_reply_is_added()
+    {
+        Notification::fake();
+
+        $this->signIn()
+            ->thread
+            ->subscribe()
+            ->addReply([
+                'body' => 'Foobar',
+                'user_id' => 999
+            ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
 
     }
 
@@ -71,7 +91,8 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_can_be_subscribed_to() {
+    public function a_thread_can_be_subscribed_to()
+    {
 
         $thread = create('App\Thread');
 
@@ -87,7 +108,8 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_can_be_unsubscribed_from() {
+    public function a_thread_can_be_unsubscribed_from()
+    {
 
         $thread = create('App\Thread');
 
@@ -102,7 +124,8 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_knows_if_the_authenticated_user_is_subscribed_to_it() {
+    public function it_knows_if_the_authenticated_user_is_subscribed_to_it()
+    {
 
         $thread = create('App\Thread');
 
@@ -113,6 +136,24 @@ class ThreadTest extends TestCase
         $thread->subscribe();
 
         $this->assertTrue($thread->isSubscribedTo);
+
+    }
+
+    /** @test */
+    public function a_thread_can_check_if_the_authenticated_user_has_read_all_replies()
+    {
+
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        tap(auth()->user(), function ($user) use ($thread) {
+            $this->assertTrue($thread->hasUpdatesFor($user));
+
+            $user->read($thread);
+
+            $this->assertFalse($thread->hasUpdatesFor($user));
+        });
 
     }
 

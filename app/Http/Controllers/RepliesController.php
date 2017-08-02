@@ -10,34 +10,55 @@ use Illuminate\Http\Request;
 class RepliesController extends Controller
 {
 
-    public function __construct() {
+    /**
+     * RepliesController constructor.
+     */
+    public function __construct()
+    {
         $this->middleware('auth', ['except' => 'index']);
     }
 
-    public function index($channelId, Thread $thread) {
+    /**
+     * @param $channelId
+     * @param Thread $thread
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function index($channelId, Thread $thread)
+    {
         return $thread->replies()->paginate(20);
     }
 
-    public function store($channelId, Thread $thread) {
+    /**
+     * @param $channelId
+     * @param Thread $thread
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store($channelId, Thread $thread)
+    {
 
-        $this->validate(request(),[
-            'body'  =>  'required'
-        ]);
+        try {
 
-        $reply = $thread->addReply([
-            'body'    =>    request('body'),
-            'user_id' =>    auth()->id()
-        ]);
+            $this->validate(request(), ['body' => 'required|spamfree']);
 
-        if(request()->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ]);
+
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time', 422);
         }
 
-        return back()->with('flash', 'Your reply has been left.');
+        return $reply->load('owner');
 
     }
 
-    public function destroy(Reply $reply) {
+    /**
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function destroy(Reply $reply)
+    {
 
         $this->authorize('update', $reply);
 
@@ -51,10 +72,24 @@ class RepliesController extends Controller
 
     }
 
-    public function update(Reply $reply) {
+    /**
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function update(Reply $reply)
+    {
 
         $this->authorize('update', $reply);
-        $reply->update(request(['body']));
+
+        try {
+
+            $this->validate(request(), ['body' => 'required|spamfree']);
+
+            $reply->update(request('body'));
+
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time', 422);
+        }
 
     }
 
