@@ -8,6 +8,7 @@
 /db-data
 /composer-cache
 /redis-data
+/minio
 Homestead.json
 Homestead.yaml
 npm-debug.log
