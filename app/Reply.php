@@ -2,8 +2,13 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Reply
+ * @package App
+ */
 class Reply extends Model
 {
 
@@ -15,7 +20,8 @@ class Reply extends Model
 
     protected $appends = ['favoritesCount', 'isFavorited'];
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
 
         static::created(function ($reply) {
@@ -27,22 +33,39 @@ class Reply extends Model
         });
     }
 
-    public function owner() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner()
+    {
 
         return $this->belongsTo(User::class, 'user_id');
 
     }
 
-    public function thread() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thread()
+    {
 
         return $this->belongsTo(Thread::class);
 
     }
 
-    public function path() {
+    /**
+     * @return string
+     */
+    public function path()
+    {
 
         return $this->thread->path() . "#reply-{$this->id}";
 
+    }
+
+    public function wasJustPublished()
+    {
+        return $this->created_at->gt(Carbon::now()->subMinute(1));
     }
 
 }
