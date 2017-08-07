@@ -43,3 +43,5 @@ Route::patch('/replies/{reply}', 'RepliesController@update')->name('replies.upda
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy')->name('profiles.notifications.destroy');
 Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index')->name('profiles.notifications');
+
+Route::get('api/users', 'Api\UsersController@index');
