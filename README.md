@@ -1,2 +1,2 @@
 # forum
-Curso como criar um Fórum com Laravel
+Curso como criar um Fórum com Laravel =)
