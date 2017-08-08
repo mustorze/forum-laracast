@@ -12,10 +12,22 @@
                         <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
                     </h1>
 
+                    @can('update', $profileUser)
+                        <form method="POST" action="/api/users/{{ $profileUser->id }}/avatar" enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            <input name="avatar" type="file">
+
+                            <button type="submit" class="btn btn-primary">Add Avatar</button>
+                        </form>
+                    @endcan
+
+                    <img src="{{ asset('storage/' . $profileUser->avatar_path) }}" alt="" width="50">
+
                 </div>
 
                 @forelse ($activities as $date => $activity)
-                    <h3>{{ $date }}</h3><hr>
+                    <h3>{{ $date }}</h3>
+                    <hr>
                     @foreach ($activity as $record)
                         @if(view()->exists("profiles.activities.{$record->type}"))
                             @include ("profiles.activities.{$record->type}", ['activity' => $record])
