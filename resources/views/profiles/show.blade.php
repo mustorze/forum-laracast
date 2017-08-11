@@ -7,21 +7,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="page-header">
 
-                    <h1>
-                        {{ $profileUser->name }}
-                        <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
-                    </h1>
-
-                    @can('update', $profileUser)
-                        <form method="POST" action="/api/users/{{ $profileUser->id }}/avatar" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            <input name="avatar" type="file">
-
-                            <button type="submit" class="btn btn-primary">Add Avatar</button>
-                        </form>
-                    @endcan
-
-                    <img src="{{ asset('storage/' . $profileUser->avatar_path) }}" alt="" width="50">
+                    <avatar-form :user="{{ $profileUser }}"></avatar-form>
 
                 </div>
 
