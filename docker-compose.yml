@@ -40,7 +40,6 @@ services:
 
   redis:
     build: docker/redis
-    command: --appendonly yes
     volumes:
       - ./redis-data:/data
     ports:
