@@ -1,4 +1,4 @@
-FROM php:7.1-fpm-alpine
+FROM php:fpm-alpine
 
 COPY php.ini $PHP_INI_DIR/php.ini
 

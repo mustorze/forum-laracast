@@ -5,40 +5,43 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Thread;
 use App\Channel;
-use Carbon\Carbon;
+use App\Trending;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
+/**
+ * Class ThreadsController
+ * @package App\Http\Controllers
+ */
 class ThreadsController extends Controller
 {
-
+    /**
+     * ThreadsController constructor.
+     */
     public function __construct()
     {
-
         $this->middleware('auth')->except(['index', 'show']);
-
     }
 
     /**
      * Display a listing of the resource.
      *
+     * @param Channel $channel
+     * @param ThreadFilters $filters
+     * @param Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
-
         $threads = $this->getThreads($channel, $filters);
 
         if (request()->wantsJson()) {
             return $threads;
         }
 
-        $trending = collect(Redis::zrevrange('trending_threads', 0, 4))->map(function ($thread) {
-            return json_decode($thread);
-        });
-
-        return view('threads.index', compact('threads', 'trending'));
-
+        return view('threads.index', [
+            'threads' => $threads,
+            'trending' => $trending->get()
+        ]);
     }
 
     /**
@@ -59,13 +62,10 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
-
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id'
-
         ]);
 
         $thread = Thread::create([
@@ -77,46 +77,43 @@ class ThreadsController extends Controller
 
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
-
     }
 
     /**
      * Display the specified resource.
      *
+     * @param $channelId
      * @param  \App\Thread $thread
+     * @param Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function show($channelId, Thread $thread)
+    public function show($channelId, Thread $thread, Trending $trending)
     {
-
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
 
-        Redis::zincrby('trending_threads', 1, json_encode([
+        $trending->push([
             'title' => $thread->title,
             'path' => $thread->path()
-        ]));
+        ]);
 
         return view('threads.show', compact('thread'));
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param Channel $channel
      * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function destroy(Channel $channel, Thread $thread)
     {
-
         $this->authorize('update', $thread);
 
         if ($thread->user_id != auth()->id()) {
-
             abort(403, 'You do not have permission to do this.');
-
         }
 
         $thread->delete();
@@ -126,7 +123,6 @@ class ThreadsController extends Controller
         }
 
         return redirect(route('threads'));
-
     }
 
     /**
@@ -139,15 +135,9 @@ class ThreadsController extends Controller
         $threads = Thread::latest()->filter($filters);
 
         if ($channel->exists) {
-
             $threads->where('channel_id', $channel->id);
-
         }
 
-        $threads = $threads->paginate(20);
-
-        return $threads;
-
+        return $threads->paginate(20);
     }
-
 }

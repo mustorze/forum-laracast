@@ -1,3 +1,3 @@
-FROM mysql:5.7
+FROM mysql:latest
 
 COPY mode.cnf /etc/mysql/mysql.conf.d/mode.cnf
