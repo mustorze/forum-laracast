@@ -3,29 +3,30 @@
 namespace App;
 
 use App\Events\ThreadHasNewReply;
-use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Thread
+ * @package App
+ */
 class Thread extends Model
 {
-
-    use RecordsActivity;
+    use RecordsActivity, RecordsVisits;
 
     protected $guarded = [];
-
     protected $with = ['creator', 'channel'];
-
     protected $appends = ['isSubscribedTo'];
 
+    /**
+     *
+     */
     protected static function boot()
     {
-
         parent::boot();
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
-
     }
 
     /**
@@ -33,9 +34,7 @@ class Thread extends Model
      */
     public function path()
     {
-
         return url('/') . '/threads/' . $this->channel->slug . '/' . $this->id;
-
     }
 
     /**
@@ -43,9 +42,7 @@ class Thread extends Model
      */
     public function replies()
     {
-
         return $this->hasMany(Reply::class);
-
     }
 
     /**
@@ -53,9 +50,7 @@ class Thread extends Model
      */
     public function getReplyCountAttribute()
     {
-
         return $this->replies()->count();
-
     }
 
     /**
@@ -63,9 +58,7 @@ class Thread extends Model
      */
     public function creator()
     {
-
         return $this->belongsTo(User::class, 'user_id');
-
     }
 
     /**
@@ -116,13 +109,11 @@ class Thread extends Model
      */
     public function subscribe($userId = null)
     {
-
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
         ]);
 
         return $this;
-
     }
 
     /**
@@ -131,13 +122,11 @@ class Thread extends Model
      */
     public function unsubscribe($userId = null)
     {
-
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
 
         return $this;
-
     }
 
     /**
@@ -145,9 +134,7 @@ class Thread extends Model
      */
     public function subscriptions()
     {
-
         return $this->hasMany(ThreadSubscription::class);
-
     }
 
     /**
@@ -172,5 +159,4 @@ class Thread extends Model
 
         return $this->updated_at > cache($key);
     }
-
 }
