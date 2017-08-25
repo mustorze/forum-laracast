@@ -7,6 +7,7 @@ use App\Thread;
 use App\Channel;
 use App\Trending;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class ThreadsController
@@ -62,6 +63,7 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
+        Cache::flush();
         $this->validate($request, [
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
