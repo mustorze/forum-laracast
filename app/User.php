@@ -27,6 +27,10 @@ class User extends Authenticatable
         'password', 'remember_token', 'email'
     ];
 
+    protected $casts = [
+      'confirmed' => 'boolean'
+    ];
+
     /**
      * Get the route key for the model.
      *
@@ -51,6 +55,13 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = true;
+
+        $this->save();
     }
 
     /**
