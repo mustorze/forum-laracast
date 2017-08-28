@@ -7,7 +7,6 @@ use App\Thread;
 use App\Channel;
 use App\Trending;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Class ThreadsController

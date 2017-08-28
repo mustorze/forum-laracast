@@ -4,9 +4,11 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Class ThreadWasUpdated
+ * @package App\Notifications
+ */
 class ThreadWasUpdated extends Notification
 {
     use Queueable;
@@ -17,7 +19,8 @@ class ThreadWasUpdated extends Notification
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param $thread
+     * @param $reply
      */
     public function __construct($thread, $reply)
     {
@@ -28,7 +31,7 @@ class ThreadWasUpdated extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -39,14 +42,14 @@ class ThreadWasUpdated extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            'message'   =>  $this->reply->owner->name . ' Replied to ' . $this->thread->title,
-            'link'  =>  $this->reply->path()
+            'message' => $this->reply->owner->name . ' Replied to ' . $this->thread->title,
+            'link' => $this->reply->path()
         ];
     }
 }

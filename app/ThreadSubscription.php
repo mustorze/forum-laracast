@@ -5,19 +5,35 @@ namespace App;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class ThreadSubscription
+ * @package App
+ */
 class ThreadSubscription extends Model
 {
     protected $guarded = [];
 
-    public function user() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function thread() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thread()
+    {
         return $this->belongsTo(Thread::class);
     }
 
-    public function notify($reply) {
+    /**
+     * @param $reply
+     */
+    public function notify($reply)
+    {
         $this->user->notify(new ThreadWasUpdated($this->thread, $reply));
     }
 }

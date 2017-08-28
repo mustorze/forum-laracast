@@ -2,24 +2,38 @@
 
 namespace App;
 
-trait Favoritable {
+/**
+ * Trait Favoritable
+ * @package App
+ */
+trait Favoritable
+{
 
-    protected static function bootFavoritable() {
-
+    /**
+     *
+     */
+    protected static function bootFavoritable()
+    {
         static::deleting(function ($model) {
 
             $model->favorites->each->delete();
 
         });
-
     }
 
-    public function favorites() {
+    /**
+     * @return mixed
+     */
+    public function favorites()
+    {
         return $this->morphMany(Favorite::class, 'favorited');
     }
 
-    public function favorite() {
-
+    /**
+     * @return mixed
+     */
+    public function favorite()
+    {
         $attributes = ['user_id' => auth()->id()];
 
         if (!$this->favorites()->where($attributes)->exists()) {
@@ -27,29 +41,39 @@ trait Favoritable {
             return $this->favorites()->create($attributes);
 
         }
-
     }
 
-    public function unfavorite() {
-
+    /**
+     *
+     */
+    public function unfavorite()
+    {
         $attributes = ['user_id' => auth()->id()];
 
         $this->favorites()->where($attributes)->get()->each->delete();
-
     }
 
-    public function isFavorited() {
-
-        return !! $this->favorites->where('user_id', auth()->id())->count();
-
+    /**
+     * @return bool
+     */
+    public function isFavorited()
+    {
+        return !!$this->favorites->where('user_id', auth()->id())->count();
     }
 
-    public function getIsFavoritedAttribute() {
+    /**
+     * @return bool
+     */
+    public function getIsFavoritedAttribute()
+    {
         return $this->isFavorited();
     }
 
-    public function getFavoritesCountAttribute() {
+    /**
+     * @return mixed
+     */
+    public function getFavoritesCountAttribute()
+    {
         return $this->favorites->count();
     }
-
 }

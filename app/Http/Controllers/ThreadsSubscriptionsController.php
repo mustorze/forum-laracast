@@ -2,27 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Channel;
 use App\Thread;
-use Illuminate\Http\Request;
 
+/**
+ * Class ThreadsSubscriptionsController
+ * @package App\Http\Controllers
+ */
 class ThreadsSubscriptionsController extends Controller
 {
-
+    /**
+     * ThreadsSubscriptionsController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth')->only(['store', 'destroy']);
     }
 
-    public function store($channelId, Thread $thread) {
-
+    /**
+     * @param $channelId
+     * @param Thread $thread
+     */
+    public function store($channelId, Thread $thread)
+    {
         $thread->subscribe();
-
     }
 
-    public function destroy($channelId, Thread $thread) {
-
+    /**
+     * @param $channelId
+     * @param Thread $thread
+     */
+    public function destroy($channelId, Thread $thread)
+    {
         $thread->unsubscribe();
-
     }
 }

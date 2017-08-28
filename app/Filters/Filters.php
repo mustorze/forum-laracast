@@ -2,23 +2,32 @@
 
 namespace App\Filters;
 
-use App\User;
 use Illuminate\Http\Request;
 
-abstract class Filters {
-
+/**
+ * Class Filters
+ * @package App\Filters
+ */
+abstract class Filters
+{
     protected $request, $builder;
-
     protected $filters = [];
 
-    public function __construct(Request $request) {
-
+    /**
+     * Filters constructor.
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
         $this->request = $request;
-
     }
 
-    public function apply($builder) {
-
+    /**
+     * @param $builder
+     * @return mixed
+     */
+    public function apply($builder)
+    {
         $this->builder = $builder;
 
         foreach ($this->getFilters() as $filter => $value) {
@@ -32,13 +41,13 @@ abstract class Filters {
         }
 
         return $this->builder;
-
     }
 
-    public function getFilters() {
-
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
         return $this->request->intersect($this->filters);
-
     }
-
 }

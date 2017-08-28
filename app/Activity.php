@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Activity
+ * @package App
+ */
 class Activity extends Model
 {
     protected $guarded = [];
@@ -32,5 +36,4 @@ class Activity extends Model
                 return $activity->created_at->format('Y-m-d');
             });
     }
-
 }

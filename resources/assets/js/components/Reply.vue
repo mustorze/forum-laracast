@@ -19,13 +19,14 @@
         <div class="panel-body">
 
             <div v-if="editing">
-                <form @submit="update"></form>
-                <div class="form-group">
-                    <textarea class="form-control" v-model="body" required></textarea>
-                </div>
+                <form @submit="update">
+                    <div class="form-group">
+                        <textarea class="form-control" v-model="body" required></textarea>
+                    </div>
 
-                <button type="submit" class="btn btn-xs btn-primary">Update</button>
-                <button type="button" class="btn btn-xs btn-link" @click="editing = false">Cancel</button>
+                    <button type="submit" class="btn btn-xs btn-primary">Update</button>
+                    <button type="button" class="btn btn-xs btn-link" @click="editing = false">Cancel</button>
+                </form>
             </div>
 
             <div v-else v-html="body"></div>
@@ -42,59 +43,58 @@
 </template>
 
 <script>
-import Favorite from './Favorite.vue';
-import moment from 'moment';
+    import Favorite from './Favorite.vue';
+    import moment from 'moment';
 
-export default {
-    props: ['data'],
+    export default {
+        props: ['data'],
 
-    components: { Favorite },
+        components: {Favorite},
 
-    data() {
-        return {
-            editing: false,
-            id: this.data.id,
-            body: this.data.body
-        };
-    },
-
-    computed: {
-
-        signedIn() {
-            return window.App.signedIn;
+        data() {
+            return {
+                editing: false,
+                id: this.data.id,
+                body: this.data.body
+            };
         },
 
-        canUpdate() {
-            return this.authorize(user => this.data.user_id == window.App.user.id);
-        },
+        computed: {
 
-        ago() {
-            return moment(this.data.created_at).fromNow() + '...';
-        }
+            signedIn() {
+                return window.App.signedIn;
+            },
 
-    },
+            canUpdate() {
+                return this.authorize(user => this.data.user_id == window.App.user.id);
+            },
 
-    methods: {
-        update() {
-            axios.patch('/replies/' + this.data.id, {
-                body: this.body
-            })
-            .catch(error => {
-                flash(error.response.data, 'danger');
-            });
-
-            this.editing = false;
-            flash('Updated!');
+            ago() {
+                return moment(this.data.created_at).fromNow() + '...';
+            }
 
         },
 
-        destroy() {
+        methods: {
+            update() {
+                axios.patch('/replies/' + this.data.id, {
+                    body: this.body
+                })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    });
 
-            axios.delete('/replies/' + this.data.id);
+                this.editing = false;
+                flash('Updated!');
+            },
 
-            this.$emit('deleted', this.data.id);
+            destroy() {
 
+                axios.delete('/replies/' + this.data.id);
+
+                this.$emit('deleted', this.data.id);
+
+            }
         }
     }
-}
 </script>

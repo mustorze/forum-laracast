@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class UserAvatarController
+ * @package App\Http\Controllers\Api
+ */
 class UserAvatarController extends Controller
 {
     public function store()
@@ -14,7 +17,7 @@ class UserAvatarController extends Controller
         ]);
 
         auth()->user()->update([
-           'avatar_path' => request()->file('avatar')->store('avatars', 'public')
+            'avatar_path' => request()->file('avatar')->store('avatars', 'public')
         ]);
 
         return response([], 204);

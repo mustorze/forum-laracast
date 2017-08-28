@@ -8,7 +8,6 @@ namespace App\Inspections;
  */
 class Spam
 {
-
     protected $inspections = [
         InvalidKeywords::class,
         KeyHeldDown::class
@@ -26,5 +25,4 @@ class Spam
 
         return false;
     }
-
 }

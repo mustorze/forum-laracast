@@ -6,18 +6,20 @@ use App\Channel;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class AppServiceProvider
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
-    * Bootstrap any application services.
-    *
-    * @return void
-    */
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
     public function boot()
     {
         Schema::defaultStringLength(191);
-
-        //\View::share('channels', Channel::all());
 
         \View::composer('*', function ($view) {
 
@@ -30,24 +32,5 @@ class AppServiceProvider extends ServiceProvider
         });
 
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
-
     }
-
-    /**
-    * Register any application services.
-    *
-    * @return void
-    */
-    public function register()
-    {
-
-        /*
-        if($this->app->isLocal()) {
-
-        $this->register(\Barryvdh\Debugbar\ServiceProvider::class);
-
-    }
-    */
-
-}
 }

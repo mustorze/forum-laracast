@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
-use App\Notifications\YouWereMentioned;
 use App\Thread;
 use App\Reply;
 
@@ -11,6 +10,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Class RepliesController
+ * @package App\Http\Controllers
+ */
 class RepliesController extends Controller
 {
 
@@ -52,7 +55,6 @@ class RepliesController extends Controller
      */
     public function destroy(Reply $reply)
     {
-
         $this->authorize('update', $reply);
 
         $reply->delete();
@@ -62,7 +64,6 @@ class RepliesController extends Controller
         }
 
         return back();
-
     }
 
     /**
@@ -71,13 +72,10 @@ class RepliesController extends Controller
      */
     public function update(Reply $reply)
     {
-
         $this->authorize('update', $reply);
 
         $this->validate(request(), ['body' => 'required|spamfree']);
 
         $reply->update(request(['body']));
-
     }
-
 }

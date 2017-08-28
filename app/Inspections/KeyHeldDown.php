@@ -10,7 +10,6 @@ use Exception;
  */
 class KeyHeldDown
 {
-
     /**
      * @param $body
      * @return bool

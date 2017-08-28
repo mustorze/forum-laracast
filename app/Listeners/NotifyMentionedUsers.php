@@ -6,9 +6,12 @@ use App\Events\ThreadHasNewReply;
 use App\Notifications\YouWereMentioned;
 use App\User;
 
+/**
+ * Class NotifyMentionedUsers
+ * @package App\Listeners
+ */
 class NotifyMentionedUsers
 {
-
     /**
      * Handle the event.
      *

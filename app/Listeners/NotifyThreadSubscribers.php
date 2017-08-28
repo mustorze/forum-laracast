@@ -4,6 +4,10 @@ namespace App\Listeners;
 
 use App\Events\ThreadHasNewReply;
 
+/**
+ * Class NotifyThreadSubscribers
+ * @package App\Listeners
+ */
 class NotifyThreadSubscribers
 {
     /**

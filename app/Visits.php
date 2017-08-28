@@ -3,7 +3,6 @@
 
 namespace App;
 
-
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\Redis;
  */
 class Visits
 {
-
     protected $model;
 
     /**
@@ -24,6 +22,9 @@ class Visits
         $this->model = $model;
     }
 
+    /**
+     * @return $this
+     */
     public function reset()
     {
         Redis::del($this->cacheKey());
@@ -31,11 +32,17 @@ class Visits
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return Redis::get($this->cacheKey()) ?: 0;
     }
 
+    /**
+     * @return $this
+     */
     public function record()
     {
         Redis::incr($this->cacheKey());

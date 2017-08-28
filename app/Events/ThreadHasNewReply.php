@@ -6,6 +6,10 @@ use App\Reply;
 use App\Thread;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class ThreadHasNewReply
+ * @package App\Events
+ */
 class ThreadHasNewReply
 {
     use SerializesModels;
@@ -24,5 +28,4 @@ class ThreadHasNewReply
         $this->thread = $thread;
         $this->reply = $reply;
     }
-
 }
