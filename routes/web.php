@@ -24,7 +24,7 @@ Route::get('/threads/create', 'ThreadsController@create')->name('threads.create'
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware('must-be-confirmed');
 
-Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
+Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('threads.replies.store');
