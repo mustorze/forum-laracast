@@ -31,57 +31,49 @@ $factory->state(App\User::class, 'unconfirmed', function () {
 });
 
 $factory->define(App\Thread::class, function ($faker) {
-        $title = $faker->sentence;
-        return [
-            'user_id' => function () {
-                return create('App\User')->id;
-            },
-            'channel_id' => function () {
-                return create('App\Channel')->id;
-            },
-            'title'   => $title,
-            'body'    => $faker->paragraph,
-            'slug'    => str_slug($title, '-')
-        ];
-
+    $title = $faker->sentence;
+    return [
+        'user_id' => function () {
+            return create('App\User')->id;
+        },
+        'channel_id' => function () {
+            return create('App\Channel')->id;
+        },
+        'title' => $title,
+        'body' => $faker->paragraph,
+        'slug' => str_slug($title, '-')
+    ];
 });
 
 $factory->define(App\Channel::class, function ($faker) {
+    $name = $faker->word;
 
-        $name = $faker->word;
-
-
-        return [
-            'name'  =>  $name,
-            'slug'  =>  $name
-        ];
-
+    return [
+        'name' => $name,
+        'slug' => $name
+    ];
 });
 
 $factory->define(App\Reply::class, function ($faker) {
-
-        return [
-            'thread_id' => function () {
-                return create('App\Thread')->id;
-            },
-            'user_id' => function () {
-                return create('App\User')->id;
-            },
-            'body'    => $faker->paragraph
-        ];
-
+    return [
+        'thread_id' => function () {
+            return create('App\Thread')->id;
+        },
+        'user_id' => function () {
+            return create('App\User')->id;
+        },
+        'body' => $faker->paragraph
+    ];
 });
 
 $factory->define(\Illuminate\Notifications\DatabaseNotification::class, function ($faker) {
-
-        return [
-            'id'    =>  \Ramsey\Uuid\Uuid::uuid4()->toString(),
-            'type'  =>  'App\Notifications\ThreadWasUpdated',
-            'notifiable_id' =>  function () {
-                return auth()->id() ?: factory('App\User')->create()->id;
-            },
-            'notifiable_type'   =>  'App\User',
-            'data'  =>  ['foo'  =>  'bar']
-        ];
-
+    return [
+        'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+        'type' => 'App\Notifications\ThreadWasUpdated',
+        'notifiable_id' => function () {
+            return auth()->id() ?: factory('App\User')->create()->id;
+        },
+        'notifiable_type' => 'App\User',
+        'data' => ['foo' => 'bar']
+    ];
 });

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Thread;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -61,6 +62,24 @@ class CreateThreadsTest extends TestCase
     {
         $this->publishThread(['body' => null])
             ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    function a_thread_requires_a_unique_slug()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+
+        $this->post(route('threads'), $thread->toArray());
+
+        $this->assertTrue(Thread::where('slug', 'foo-title-2')->exists());
+
+        $this->post(route('threads'), $thread->toArray());
+
+        $this->assertTrue(Thread::where('slug', 'foo-title-3')->exists());
     }
 
     /** @test */
