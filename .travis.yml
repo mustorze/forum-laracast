@@ -3,6 +3,9 @@ language: php
 php:
   - 7.1
 
+services:
+  - redis-server
+
 before_script:
   - cp .env.example .env
   - composer self-update
