@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Thread;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -69,17 +67,25 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+        $thread = create('App\Thread', ['title' => 'Foo Title']);
 
         $this->assertEquals($thread->fresh()->slug, 'foo-title');
 
-        $this->post(route('threads'), $thread->toArray());
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
 
-        $this->assertTrue(Thread::where('slug', 'foo-title-2')->exists());
+        $this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+    }
 
-        $this->post(route('threads'), $thread->toArray());
+    /** @test */
+    function a_thread_with_a_title_that_ends_in_a_number_should_generate_proper_slug()
+    {
+        $this->signIn();
 
-        $this->assertTrue(Thread::where('slug', 'foo-title-3')->exists());
+        $thread = create('App\Thread', ['title' => 'Some title 24']);
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("some-title-24-{$thread['id']}", $thread['slug']);
     }
 
     /** @test */
@@ -140,5 +146,4 @@ class CreateThreadsTest extends TestCase
             'subject_type' => get_class($reply)
         ]);
     }
-
 }
