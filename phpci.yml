@@ -1,0 +1,26 @@
+build_settings:
+  verbose: false
+  prefer_symlink: false
+
+setup:
+  composer:
+    action: "install"
+    prefer_dist: false
+  shell:
+    - "cp .env.example .env"
+    - "php artisan key:generate"
+
+test:
+  php_unit:
+    config:
+      - "phpunit.xml"
+    path: "tests/"
+
+failure:
+  email:
+    committer: true
+    default_mailto_address: henrique@mustorze.com
+
+complete:
+  email:
+    default_mailto_address: henrique@mustorze.com
