@@ -34,7 +34,7 @@
         </div>
 
         <div class="panel-footer level">
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', data)" class="flex">
                 <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
                 <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
             </div>
@@ -61,24 +61,20 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
-                isBest: false
+                isBest: this.data.isBest
             };
         },
 
         computed: {
-
-            signedIn() {
-                return window.App.signedIn;
-            },
-
-            canUpdate() {
-                return this.authorize(user => this.data.user_id == window.App.user.id);
-            },
-
             ago() {
                 return moment(this.data.created_at).fromNow() + '...';
             }
+        },
 
+        created() {
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (id === this.id);
+            });
         },
 
         methods: {
@@ -104,6 +100,10 @@
 
             markBestReply() {
                 this.isBest = true;
+
+                axios.post('/replies/' + this.data.id + '/best');
+
+                window.events.$emit('best-reply-selected', this.data.id);
             }
         }
     }
