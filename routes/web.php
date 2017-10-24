@@ -22,7 +22,9 @@ Route::get('/threads', 'ThreadsController@index')->name('threads');
 
 Route::get('/threads/create', 'ThreadsController@create')->name('threads.create');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
+Route::patch('/threads/{channel}/{thread}', 'ThreadsController@update');
 Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware('must-be-confirmed');
+Route::post('/locked-thread/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
 
 Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
 
