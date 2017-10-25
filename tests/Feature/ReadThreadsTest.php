@@ -12,7 +12,8 @@ class ReadThreadsTest extends TestCase
 
     use DatabaseMigrations;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->thread = create('App\Thread');
@@ -21,17 +22,15 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_browse_all_threads()
     {
-
         $this->get(route('threads'))
-        ->assertSee($this->thread->title);
+            ->assertSee($this->thread->title);
     }
 
     /** @test */
     public function a_user_can_browse_single_thread()
     {
-
         $this->get($this->thread->path())
-        ->assertSee($this->thread->title);
+            ->assertSee($this->thread->title);
     }
 
     /** @test */
@@ -82,7 +81,8 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_filter_threads_by_those_that_are_unanswered() {
+    public function a_user_can_filter_threads_by_those_that_are_unanswered()
+    {
 
         $thread = create('App\Thread');
         create('App\Reply', ['thread_id' => $thread->id]);
@@ -94,7 +94,8 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_request_all_replies_for_a_given_thread() {
+    public function a_user_can_request_all_replies_for_a_given_thread()
+    {
         $thread = create('App\Thread');
         create('App\Reply', ['thread_id' => $thread->id], 2);
 
