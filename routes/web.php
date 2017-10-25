@@ -25,6 +25,7 @@ Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::patch('/threads/{channel}/{thread}', 'ThreadsController@update');
 Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware('must-be-confirmed');
 Route::post('/locked-thread/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
+Route::delete('/locked-thread/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');
 
 Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
 
