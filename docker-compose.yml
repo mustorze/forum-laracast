@@ -2,11 +2,13 @@ version: '2'
 
 services:
   nginx:
-    build: docker/nginx
+    image: nginx:alpine
     ports:
       - 80:80
     volumes_from:
       - app
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app-network
     links:
@@ -16,7 +18,7 @@ services:
 
   app:
     command: "true"
-    image: alpine:3.4
+    image: alpine:3.6
     volumes:
       - ./:/var/www/app
     links:
@@ -39,7 +41,7 @@ services:
       - redis
 
   redis:
-    build: docker/redis
+    image: redis:alpine
     volumes:
       - ./redis-data:/data
     ports:
@@ -48,7 +50,7 @@ services:
       - app-network
 
   mysql:
-    build: docker/mysql
+    image: mysql:latest
     volumes:
       - ./db-data:/var/lib/mysql
     environment:
@@ -64,7 +66,7 @@ services:
       - app-network
 
   minio:
-    build: docker/minio
+    image: minio/minio
     command: server /export
     environment:
       - MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE
