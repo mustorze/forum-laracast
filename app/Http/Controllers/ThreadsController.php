@@ -86,6 +86,18 @@ class ThreadsController extends Controller
             ->with('flash', 'Your thread has been published!');
     }
 
+    public function update($channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        $thread->update(request()->validate([
+           'title' => 'required|spamfree',
+           'body' => 'required|spamfree'
+        ]));
+
+        return $thread;
+    }
+
     /**
      * Display the specified resource.
      *
