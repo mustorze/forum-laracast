@@ -35,9 +35,13 @@ Vue.component('paginator', require('./components/Paginator.vue'));
 Vue.component('user-notifications', require('./components/UserNotifications.vue'));
 Vue.component('thread-view', require('./pages/Thread.vue'));
 Vue.component('avatar-form', require('./components/AvatarForm.vue'));
+Vue.component('wysiwyg', require('./components/Wysiwyg.vue'));
 
 // Vue.component('reply', require('./components/Reply.vue'));
 // Vue.component('favorite', require('./components/Favorite.vue'));
+
+import InstantSearch from 'vue-instantsearch';
+Vue.use(InstantSearch);
 
 const app = new Vue({
     el: '#app'

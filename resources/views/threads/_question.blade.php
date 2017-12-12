@@ -7,7 +7,7 @@
 
     <div class="panel-body">
         <div class="form-group">
-        <textarea rows="10" class="form-control" v-model="form.body"></textarea>
+            <wysiwyg name="body" v-model="form.body" :value="form.body"></wysiwyg>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="panel-body" v-text="form.body">
+    <div class="panel-body" v-html="form.body">
     </div>
 
     <div class="panel-footer" v-if="authorize('owns', thread)">
