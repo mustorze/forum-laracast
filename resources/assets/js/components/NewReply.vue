@@ -1,20 +1,14 @@
 <template>
     <div>
-
         <div v-if="signedIn">
-
             <div class="form-group">
-                <textarea name="body" id="body" class="form-control" placeholder="Have something to say?" rows="5"
-                          v-model="body" required></textarea>
+                <wysiwyg name="body" v-model="body" placeholder="Have something to say?" :shouldClear="completed"></wysiwyg>
             </div>
 
             <button type="submit" class="btn btn-default" name="button" @click="addReply">Post</button>
-
         </div>
 
         <p class="text-center" v-else>Please <a href="/login">sign in</a> to participate in this discussion.</p>
-
-
     </div>
 </template>
 
@@ -26,7 +20,8 @@
 
         data() {
             return {
-                body: ''
+                body: '',
+                completed: false
             };
         },
 
@@ -52,6 +47,7 @@
                     })
                     .then(({data}) => {
                         this.body = '';
+                        this.completed = true;
 
                         flash('Your reply has been posted.');
 
