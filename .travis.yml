@@ -11,8 +11,6 @@ before_script:
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
-  - npm install
 
 script:
-  - npm run dev
   - vendor/bin/phpunit
