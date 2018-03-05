@@ -166,4 +166,11 @@ class CreateThreadsTest extends TestCase
             'subject_type' => get_class($reply)
         ]);
     }
+
+    /** @test */
+    function a_threads_body_is_sanitized_automatically()
+    {
+        $thread = make('App\Thread', ['body' => '<script>alert("Bad")</script><p>this is okay</p>']);
+        $this->assertEquals('<p>this is okay</p>', $thread->body);
+    }
 }
