@@ -15,6 +15,7 @@ git clone git@github.com:mustorze/forum-laracast.git
 cd forum-laracast && docker-compose exec php composer install && npm install
 cp .env.example .env
 docker-compose exec php php artisan key:generate
+docker-compose exec php php artisan migrate
 npm run dev
 ```
 
